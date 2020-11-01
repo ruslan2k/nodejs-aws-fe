@@ -9,8 +9,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Product} from "models/Product";
 import {formatAsPrice} from "utils/utils";
 import AddProductToCart from "components/AddProductToCart/AddProductToCart";
-// import axios from 'axios';
-// import API_PATHS from "constants/apiPaths";
+import axios from 'axios';
+import API_PATHS from "constants/apiPaths";
 import productList from "./productList.json";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,11 +36,15 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // axios.get(`${API_PATHS.bff}/product/available/`)
-    //   .then(res => setProducts(res.data));
-    setProducts(productList);
+    axios.get(`${API_PATHS.bff}/products`)
+      .then(res => {
+        console.log('res.data', res.data);
+        setProducts(res.data)
+      });
+    // setProducts(productList);
   }, [])
 
+  //               image={`https://source.unsplash.com/random?sig=${index}`}
   return (
     <Grid container spacing={4}>
       {products.map((product: Product, index: number) => (
@@ -48,7 +52,7 @@ export default function Products() {
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
-              image={`https://source.unsplash.com/random?sig=${index}`}
+              image={product.image}
               title="Image title"
             />
             <CardContent className={classes.cardContent}>
